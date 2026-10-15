@@ -1,0 +1,20 @@
+{
+  "name": "fight-politica",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node scripts/test_battle.js",
+    "prepare:assets": "node scripts/prepare_assets.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.3.0",
+    "sharp": "^0.35.5",
+    "ws": "^8.22.0"
+  }
+}

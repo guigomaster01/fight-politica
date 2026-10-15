@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POLÍTICA FIGHT: 13 vs 22 - Arcade Battle</title>
+  <meta name="description" content="Jogo de luta arcade pixel art 13 vs 22. Escolha seu lado e dispute batalhas online em tempo real com barra de vida de 0 a 100!">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥊</text></svg>">
+</head>
+<body>
+
+  <!-- CRT Scanline Retro Filter Overlay -->
+  <div class="crt-overlay disabled" aria-hidden="true"></div>
+
+  <!-- Main Arcade Frame -->
+  <main id="game-container" role="main">
+
+    <!-- Top Arcade Header -->
+    <header class="arcade-header">
+      <div class="arcade-title">
+        <span class="badge-13">★ 13</span>
+        <span class="badge-vs">VS</span>
+        <span class="badge-22">22 ⚡</span>
+      </div>
+
+      <div class="arcade-controls-top">
+        <button id="btn-toggle-audio" class="arcade-btn-mini active" title="Ativar/Desativar Efeitos Sonoros">
+          🔊 SOM: ON
+        </button>
+        <button id="btn-toggle-bgm" class="arcade-btn-mini" title="Ativar Trilha Chiptune Retro">
+          🎵 MÚSICA: OFF
+        </button>
+        <button id="btn-toggle-crt" class="arcade-btn-mini" title="Alternar Filtro CRT Arcade">
+          📺 CRT: OFF
+        </button>
+      </div>
+    </header>
+
+    <!-- 1. TITLE / INTRO SCREEN -->
+    <section id="screen-title" class="screen active" aria-label="Tela Inicial">
+      <div class="title-banner-wrap">
+        <img src="assets/images/title.jpg" alt="Política Fight 13 vs 22" class="title-banner-img pixel-art">
+      </div>
+
+      <div class="title-actions">
+        <button id="btn-start-game" class="arcade-start-btn">
+          ► PRESS START / ENTRAR NA ARENA
+        </button>
+        <p class="title-subtext">BATALHA MULTIPLAYER EM TEMPO REAL • ESTILO ARCADE 16-BIT</p>
+      </div>
+    </section>
+
+    <!-- 2. CHARACTER SELECTION SCREEN -->
+    <section id="screen-select" class="screen" aria-label="Seleção de Personagem">
+      <div class="select-header">
+        <h1 class="select-title">ESCOLHA SEU GUERREIRO</h1>
+        <p class="select-subtitle">Selecione seu lado para buscar um oponente oposto na fila de batalha!</p>
+      </div>
+
+      <div class="characters-grid">
+        <!-- Card 13 -->
+        <article class="char-card" data-char="13" id="card-char-13" tabindex="0">
+          <div class="char-card-header">
+            <span class="char-number">13</span>
+            <span class="char-title-tag">A FORÇA DO POVO</span>
+          </div>
+
+          <div class="char-preview-box">
+            <img src="assets/images/char13_avatar.png" alt="Personagem 13" class="char-avatar-img pixel-art">
+          </div>
+
+          <div class="char-info">
+            <h2 class="char-name">O COMPANHEIRO 13</h2>
+            <p class="char-description">Mestre da resistência operária. Seus golpes são alimentados pela união popular e garra incansável.</p>
+
+            <div class="char-stats">
+              <div class="stat-row">
+                <span class="stat-label">FORÇA</span>
+                <div class="stat-bar-outer"><div class="stat-bar-fill" style="width: 85%;"></div></div>
+              </div>
+              <div class="stat-row">
+                <span class="stat-label">RESISTÊNCIA</span>
+                <div class="stat-bar-outer"><div class="stat-bar-fill" style="width: 90%;"></div></div>
+              </div>
+              <div class="stat-row">
+                <span class="stat-label">ESPECIAL</span>
+                <div class="stat-bar-outer"><div class="stat-bar-fill" style="width: 95%;"></div></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 22 -->
+        <article class="char-card" data-char="22" id="card-char-22" tabindex="0">
+          <div class="char-card-header">
+            <span class="char-number">22</span>
+            <span class="char-title-tag">O CAPITÃO PATRIOTA</span>
+          </div>
+
+          <div class="char-preview-box">
+            <img src="assets/images/char22_avatar.png" alt="Personagem 22" class="char-avatar-img pixel-art">
+          </div>
+
+          <div class="char-info">
+            <h2 class="char-name">O CAPITÃO 22</h2>
+            <p class="char-description">Combate de choque e velocidade. Entra no ringue com disciplina marcial e ofensiva acelerada.</p>
+
+            <div class="char-stats">
+              <div class="stat-row">
+                <span class="stat-label">FORÇA</span>
+                <div class="stat-bar-outer"><div class="stat-bar-fill" style="width: 88%;"></div></div>
+              </div>
+              <div class="stat-row">
+                <span class="stat-label">VELOCIDADE</span>
+                <div class="stat-bar-outer"><div class="stat-bar-fill" style="width: 92%;"></div></div>
+              </div>
+              <div class="stat-row">
+                <span class="stat-label">ESPECIAL</span>
+                <div class="stat-bar-outer"><div class="stat-bar-fill" style="width: 90%;"></div></div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="select-footer">
+        <button id="btn-confirm-char" class="btn-confirm-char" disabled>
+          ESCOLHA UM PERSONAGEM ACIMA
+        </button>
+      </div>
+    </section>
+
+    <!-- 3. MATCHMAKING QUEUE SCREEN -->
+    <section id="screen-queue" class="screen" aria-label="Fila de Espera">
+      <div class="radar-wrap">
+        <div class="radar-sweep"></div>
+        <div class="radar-crosshair-h"></div>
+        <div class="radar-crosshair-v"></div>
+        <div class="radar-center-blip"></div>
+      </div>
+
+      <h2 class="queue-title">RADAR DE COMBATE ONLINE</h2>
+      <p class="queue-desc">
+        Você escolheu <span id="queue-chosen-char" class="queue-highlight">Personagem ...</span>.<br>
+        <span id="queue-status-msg">Procurando o próximo jogador que escolher o <span id="queue-target-char" class="queue-highlight">Personagem Oposto</span>...</span>
+      </p>
+
+      <div class="queue-stats-box">
+        <div class="queue-stat-item">Na fila 13: <span id="stat-waiting-13">0</span></div>
+        <div class="queue-stat-item">Na fila 22: <span id="stat-waiting-22">0</span></div>
+        <div class="queue-stat-item">Batalhas ativas: <span id="stat-active-fights">0</span></div>
+      </div>
+
+      <div class="multiplayer-tip-card">
+        <p>💡 <strong>Dica Multiplayer:</strong> Abra outra aba em <code id="queue-url-display">http://localhost:3000</code> e escolha o personagem oposto para batalharem em tempo real!</p>
+        <button id="btn-copy-url" class="btn-copy-link">📋 Copiar Link</button>
+      </div>
+
+      <div class="queue-buttons">
+        <button id="btn-play-bot" class="btn-bot-play" title="Lutar contra IA imediatamente">
+          ⚔️ LUTAR CONTRA BOT IA AGORA
+        </button>
+        <button id="btn-cancel-queue" class="btn-cancel-queue">
+          CANCELAR
+        </button>
+      </div>
+    </section>
+
+    <!-- 4. BATTLE ARENA SCREEN -->
+    <section id="screen-battle" class="screen" aria-label="Arena de Luta">
+
+      <!-- Round / Fight Banner Popup -->
+      <div id="fight-banner" class="fight-banner-popup" aria-live="assertive">ROUND 1</div>
+
+      <!-- Battle Top HUD (HP Bars: 0 to 100) -->
+      <div class="battle-hud">
+
+        <!-- P1 (13) -->
+        <div class="fighter-hud-unit p1">
+          <div class="fighter-hud-name-row">
+            <span class="fighter-badge badge-13">13</span>
+            <strong id="name-p1">O COMPANHEIRO</strong>
+            <span id="tag-you-p1" class="fighter-you-tag" style="display:none;">VOCÊ</span>
+          </div>
+
+          <!-- HP Bar: 0 to 100 -->
+          <div class="hp-bar-container p1" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+            <div id="hp-ghost-p1" class="hp-bar-ghost" style="width: 100%;"></div>
+            <div id="hp-fill-p1" class="hp-bar-fill" style="width: 100%;"></div>
+            <span id="hp-num-p1" class="hp-numeric-label">100 / 100</span>
+          </div>
+
+          <!-- Super Meter -->
+          <div class="super-meter-container">
+            <div id="super-fill-p1" class="super-meter-fill"></div>
+          </div>
+          <span class="super-meter-label">ESPECIAL</span>
+        </div>
+
+        <!-- Center Round/Timer -->
+        <div class="battle-center-info">
+          <span class="battle-round-badge">BRASÍLIA ARENA</span>
+          <span class="battle-timer">VS</span>
+        </div>
+
+        <!-- P2 (22) -->
+        <div class="fighter-hud-unit p2">
+          <div class="fighter-hud-name-row">
+            <span id="tag-you-p2" class="fighter-you-tag" style="display:none;">VOCÊ</span>
+            <strong id="name-p2">O CAPITÃO</strong>
+            <span class="fighter-badge badge-22">22</span>
+          </div>
+
+          <!-- HP Bar: 0 to 100 -->
+          <div class="hp-bar-container p2" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+            <div id="hp-ghost-p2" class="hp-bar-ghost" style="width: 100%;"></div>
+            <div id="hp-fill-p2" class="hp-bar-fill" style="width: 100%;"></div>
+            <span id="hp-num-p2" class="hp-numeric-label">100 / 100</span>
+          </div>
+
+          <!-- Super Meter -->
+          <div class="super-meter-container">
+            <div id="super-fill-p2" class="super-meter-fill"></div>
+          </div>
+          <span class="super-meter-label">ESPECIAL</span>
+        </div>
+
+      </div>
+
+      <!-- Playfield: Fighters & Effects -->
+      <div class="arena-playfield">
+        <canvas id="fx-canvas"></canvas>
+
+        <!-- Fighter 1 (Left: 13) -->
+        <div id="entity-p1" class="fighter-entity">
+          <div id="bubble-p1" class="speech-bubble">"Companheiro!"</div>
+          <div class="guard-shield-aura"></div>
+          <img id="sprite-p1" src="assets/images/char13.png" alt="Personagem 13" class="fighter-sprite pixel-art idle-anim">
+        </div>
+
+        <!-- Fighter 2 (Right: 22) -->
+        <div id="entity-p2" class="fighter-entity">
+          <div id="bubble-p2" class="speech-bubble">"É melhor se acostumar!"</div>
+          <div class="guard-shield-aura"></div>
+          <img id="sprite-p2" src="assets/images/char22.png" alt="Personagem 22" class="fighter-sprite pixel-art idle-anim">
+        </div>
+      </div>
+
+      <!-- Controls Deck (Bottom) -->
+      <footer class="battle-controls-panel">
+        <button id="btn-act-quick" class="action-btn btn-quick" title="Ataque rápido (Tecla J)">
+          <span class="btn-key-badge">[J]</span>
+          <span class="btn-action-text">SOCO</span>
+          <span class="btn-desc-text">Rápido (8-12)</span>
+          <div class="btn-cooldown-overlay"></div>
+        </button>
+
+        <button id="btn-act-heavy" class="action-btn btn-heavy" title="Golpe forte (Tecla K)">
+          <span class="btn-key-badge">[K]</span>
+          <span class="btn-action-text">GOLPE FORTE</span>
+          <span class="btn-desc-text">Pesado (14-19)</span>
+          <div class="btn-cooldown-overlay"></div>
+        </button>
+
+        <button id="btn-act-guard" class="action-btn btn-guard" title="Defender golpe (Segure Tecla L)">
+          <span class="btn-key-badge">[L]</span>
+          <span class="btn-action-text">DEFENDER</span>
+          <span class="btn-desc-text">-70% Dano</span>
+        </button>
+
+        <button id="btn-act-special" class="action-btn btn-special" title="Golpe especial (Tecla ESPAÇO)" disabled>
+          <span class="btn-key-badge">[ESPAÇO]</span>
+          <span class="btn-action-text">ESPECIAL</span>
+          <span class="btn-desc-text">Ultimate (30+)</span>
+          <div class="btn-cooldown-overlay"></div>
+        </button>
+
+        <button id="btn-act-taunt" class="action-btn" title="Provocar (Tecla T)">
+          <span class="btn-key-badge">[T]</span>
+          <span class="btn-action-text">PROVOCAR</span>
+          <span class="btn-desc-text">Grito de Luta</span>
+        </button>
+      </footer>
+
+      <!-- Game Over / Victory Modal -->
+      <div id="game-over-modal" class="game-over-modal">
+        <div class="ko-banner">K.O.</div>
+        <h2 id="modal-winner-text" class="winner-text">VITÓRIA DO PERSONAGEM 13!</h2>
+
+        <div class="battle-stats-card">
+          <div class="stats-card-row">
+            <span>Golpes Acertados (13):</span>
+            <strong id="stats-hits-13">0</strong>
+          </div>
+          <div class="stats-card-row">
+            <span>Dano Total Causado (13):</span>
+            <strong id="stats-dmg-13">0</strong>
+          </div>
+          <div class="stats-card-row">
+            <span>Golpes Acertados (22):</span>
+            <strong id="stats-hits-22">0</strong>
+          </div>
+          <div class="stats-card-row">
+            <span>Dano Total Causado (22):</span>
+            <strong id="stats-dmg-22">0</strong>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button id="btn-modal-rematch" class="btn-rematch">REVANCHE (NOVO ROUND)</button>
+          <button id="btn-modal-change" class="btn-change-char">MUDAR PERSONAGEM</button>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Espaço Discreto de Publicidade (Abaixo do jogo, sem interferir na jogabilidade) -->
+  <aside class="ad-section-discreet" aria-label="Espaço Publicitário">
+    <span class="ad-label-subtle">PUBLICIDADE</span>
+    <div class="ad-slot-300x250">
+      <script type="text/javascript">
+        atOptions = {
+          'key' : 'fd54d2871914c39e70afee0ffca608a2',
+          'format' : 'iframe',
+          'height' : 250,
+          'width' : 300,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="https://bicea.org/22/fd54d2871914c39e70afee0ffca608a2"></script>
+    </div>
+  </aside>
+
+  <script src="audio.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
