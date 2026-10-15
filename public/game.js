@@ -10,6 +10,7 @@ class ArcadeGameClient {
     this.opponentChar = null;
     this.isBot = false;
     this.currentRoomId = null;
+    this.botCountdownInterval = null;
 
     // Local Game State
     this.state = {
@@ -143,6 +144,9 @@ class ArcadeGameClient {
   }
 
   showScreen(screenName) {
+    if (screenName !== 'queue') {
+      this.clearBotCountdown();
+    }
     Object.values(this.screens).forEach(scr => {
       if (scr) scr.classList.remove('active');
     });
@@ -221,6 +225,7 @@ class ArcadeGameClient {
     const btnCancelQueue = document.getElementById('btn-cancel-queue');
     if (btnCancelQueue) {
       btnCancelQueue.addEventListener('click', () => {
+        this.clearBotCountdown();
         window.arcadeAudio.playBlip(300, 0.08);
         if (this.ws && this.ws.readyState === WebSocket.OPEN) {
           this.ws.send(JSON.stringify({ type: 'cancel_queue' }));
@@ -232,13 +237,7 @@ class ArcadeGameClient {
     const btnPlayBot = document.getElementById('btn-play-bot');
     if (btnPlayBot) {
       btnPlayBot.addEventListener('click', () => {
-        window.arcadeAudio.playConfirm();
-        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-          this.ws.send(JSON.stringify({
-            type: 'play_vs_bot',
-            character: this.selectedChar
-          }));
-        }
+        this.triggerBotMatch();
       });
     }
 
@@ -366,6 +365,49 @@ class ArcadeGameClient {
     if (queueCharSpan) queueCharSpan.textContent = `Personagem ${char}`;
     if (queueTargetSpan) queueTargetSpan.textContent = `Personagem ${targetChar}`;
     if (queueMsg) queueMsg.textContent = msg || `Aguardando alguém escolher o ${targetChar}...`;
+
+    // Start 8-second auto countdown to fight the bot
+    this.startBotCountdown();
+  }
+
+  startBotCountdown() {
+    this.clearBotCountdown();
+    let remaining = 8;
+    const countEl = document.getElementById('queue-countdown');
+    const btnSec = document.getElementById('btn-countdown-sec');
+
+    if (countEl) countEl.textContent = `${remaining}s`;
+    if (btnSec) btnSec.textContent = `${remaining}s`;
+
+    this.botCountdownInterval = setInterval(() => {
+      remaining--;
+      if (countEl) countEl.textContent = `${remaining}s`;
+      if (btnSec) btnSec.textContent = `${remaining}s`;
+
+      if (remaining <= 0) {
+        this.clearBotCountdown();
+        console.log('🤖 8s sem oponente: iniciando batalha contra o Bot IA automaticamente!');
+        this.triggerBotMatch();
+      }
+    }, 1000);
+  }
+
+  clearBotCountdown() {
+    if (this.botCountdownInterval) {
+      clearInterval(this.botCountdownInterval);
+      this.botCountdownInterval = null;
+    }
+  }
+
+  triggerBotMatch() {
+    this.clearBotCountdown();
+    window.arcadeAudio.playConfirm();
+    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+      this.ws.send(JSON.stringify({
+        type: 'play_vs_bot',
+        character: this.selectedChar
+      }));
+    }
   }
 
   startMatchCountdown() {

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node scripts/test_battle.js",
+    "test": "node scripts/test_battle.js && node scripts/test_auto_bot.js",
     "prepare:assets": "node scripts/prepare_assets.js"
   },
   "keywords": [],

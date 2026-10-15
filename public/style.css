@@ -649,6 +649,34 @@ body {
   font-weight: bold;
 }
 
+.bot-auto-countdown {
+  font-family: var(--font-retro);
+  font-size: 11px;
+  color: #cbd5e1;
+  margin-bottom: 20px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  padding: 8px 16px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.countdown-seconds {
+  color: #10b981;
+  font-family: var(--font-arcade);
+  font-size: 12px;
+  font-weight: bold;
+  display: inline-block;
+  animation: countdownPulse 1s infinite alternate;
+}
+
+@keyframes countdownPulse {
+  0% { transform: scale(1); text-shadow: 0 0 4px rgba(16, 185, 129, 0.5); }
+  100% { transform: scale(1.15); text-shadow: 0 0 12px rgba(16, 185, 129, 0.9); }
+}
+
 .queue-buttons {
   display: flex;
   gap: 14px;

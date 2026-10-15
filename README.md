@@ -13,7 +13,8 @@ Um jogo de batalha arcade em estilo **Pixel Art 16-bit** com matchmaking em temp
 2. **Matchmaking em Tempo Real**:
    - Se você escolher o **Personagem 22**, o sistema entra na fila e aguarda o próximo usuário que escolher o **Personagem 13**.
    - Assim que dois jogadores de lados opostos entram na fila, a batalha inicia instantaneamente!
-   - Há também o botão **"Lutar contra Bot IA Agora"** para jogar e treinar sozinho sem precisar esperar.
+   - **Entrada Automática do Bot (8 segundos)**: Se nenhum oponente humano entrar na fila em até 8 segundos, o jogo inicia a batalha automaticamente contra o Bot IA.
+   - Há também o botão **"Enfrentar Bot Agora"** para pular a espera e lutar imediatamente.
 
 3. **Sistema de Combate e HP (0 a 100)**:
    - Cada personagem possui uma barra de vida de **0 a 100 HP**.
